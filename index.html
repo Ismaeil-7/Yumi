@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Yumi✨</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- GSAP & Particles.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <style>
+        :root {
+            --space-dark: #050510;
+            --space-purple: #2a0a4a;
+            --space-blue: #0b1d3a;
+            --neon-cyan: #00f3ff;
+            --neon-purple: #b500ff;
+            --text-glow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--space-dark);
+            color: white;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, var(--space-blue) 0%, var(--space-purple) 40%, var(--space-dark) 100%);
+        }
+
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Glassmorphism & Buttons */
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            transition: all 0.4s ease;
+            z-index: 20;
+        }
+
+        .glass-btn:hover {
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.6), inset 0 0 20px rgba(0, 243, 255, 0.4);
+            transform: scale(1.05);
+            border-color: var(--neon-cyan);
+        }
+
+        /* Page 1 Specifics */
+        .intro-text {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            text-shadow: var(--text-glow);
+            font-weight: 300;
+        }
+
+        .orb-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .orbit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px dashed rgba(255,255,255,0.2);
+            animation: spin 10s linear infinite;
+        }
+
+        .orbit::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Page 2 Specifics */
+        .spaceship-container {
+            width: 300px;
+            height: 300px;
+            margin-bottom: 30px;
+            animation: float 4s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 30px rgba(0, 243, 255, 0.5));
+        }
+
+        .warp-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, #fff 150%);
+            opacity: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(-15px) rotate(0deg); }
+            100% { transform: translateY(15px) rotate(2deg); }
+        }
+
+        /* Page 3 Specifics */
+        .memory-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-card {
+            position: absolute;
+            width: 180px;
+            height: 250px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(181, 0, 255, 0.3);
+            padding: 10px;
+            box-shadow: 0 0 30px rgba(181, 0, 255, 0.2);
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        /* Floating positions for 4 cards */
+        .card-1 { top: 15%; right: 15%; animation: floatG 6s infinite alternate ease-in-out; }
+        .card-2 { bottom: 15%; left: 15%; animation: floatG 7s infinite alternate-reverse ease-in-out; }
+        .card-3 { top: 20%; left: 20%; animation: floatG 5s infinite alternate ease-in-out; transform: rotate(-10deg); }
+        .card-4 { bottom: 25%; right: 20%; animation: floatG 8s infinite alternate-reverse ease-in-out; transform: rotate(15deg); }
+
+        @keyframes floatG {
+            0% { transform: translateY(0) rotate(0); }
+            100% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        .emotional-text {
+            position: absolute;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            font-size: 1.8rem;
+            line-height: 2;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 30px var(--neon-purple);
+            z-index: 30;
+        }
+
+        .emotional-line {
+            opacity: 0;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .final-message {
+            position: absolute;
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 20px var(--neon-cyan), 0 0 50px var(--neon-purple);
+            opacity: 0;
+            z-index: 50;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .intro-text { font-size: 1.5rem; }
+            .spaceship-container { width: 200px; height: 200px; }
+            .photo-card { width: 120px; height: 160px; }
+            .emotional-text { font-size: 1.2rem; }
+            .final-message { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ملفات الموسيقى لكل صفحة -->
+<audio id="music-page1" src="sound/Sc1.mp3" loop></audio>
+<audio id="music-page2" src="sound/Sc1.mp3" loop></audio>
+<audio id="music-page3" src="sound/Sc3.mp3" loop></audio>
+
+
+
+    <!-- Space Background -->
+    <div id="particles-js"></div>
+    <div class="warp-overlay" id="warpOverlay"></div>
+
+    <!-- PAGE 1: INTRO -->
+    <section id="page1" class="page active">
+        <h1 class="intro-text">في رحلة وسط ملايين النجوم...</h1>
+        <div class="orb-container">
+            <div class="orbit"></div>
+            <div class="orbit" style="width: 150%; height: 150%; animation-duration: 15s; animation-direction: reverse; border-color: var(--neon-purple);"></div>
+            <button class="glass-btn" onclick="goToPage2()">اضغط هنا لفتح مركبة الفضاء</button>
+        </div>
+    </section>
+
+    <!-- PAGE 2: SPACESHIP -->
+    <section id="page2" class="page">
+        <h2 class="intro-text" style="text-align: center;">من اللحظة دي...<br>انسي كل اللي وراكي ✨</h2>
+        
+        <!-- Premium SVG Spaceship -->
+        <svg class="spaceship-container" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="shipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fff" />
+                    <stop offset="100%" stop-color="#aaa" />
+                </linearGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <path d="M100 20 L130 90 L180 110 L130 130 L100 180 L70 130 L20 110 L70 90 Z" fill="url(#shipGrad)" />
+            <circle cx="100" cy="110" r="15" fill="#00f3ff" filter="url(#glow)"/>
+            <path id="engine1" d="M70 140 L85 170 L70 160 Z" fill="#b500ff" filter="url(#glow)"/>
+            <path id="engine2" d="M130 140 L115 170 L130 160 Z" fill="#b500ff" filter="url(#glow)"/>
+        </svg>
+
+        <button class="glass-btn" id="warpBtn" onclick="triggerWarp()">ابدأ الرحلة</button>
+    </section>
+
+    <!-- PAGE 3: MEMORY & STARS -->
+    <section id="page3" class="page">
+        <div class="memory-container">
+            <!-- Replace 'src' with your actual image URLs -->
+            <div class="photo-card card-1"><img src="img/yum1.jpg" alt="Memory 1"></div>
+            <div class="photo-card card-2"><img src="img/yum2.jpg" alt="Memory 2"></div>
+            <div class="photo-card card-3"><img src="img/yum3.jpg" alt="Memory 3"></div>
+            <div class="photo-card card-4"><img src="img/yum4.jpg" alt="Memory 4"></div>
+
+            <div class="emotional-text" id="emotionalText">
+                
+                <span class="emotional-line">في وسط ملايين النجوم...</span>
+                <span class="emotional-line">في نجمة مختلفة تمامًا ✨</span>
+                <span class="emotional-line">نجمة مش بس بتنور السما...</span>
+                <span class="emotional-line">دي بتنور حياة كل اللي حواليها.</span>
+                <span class="emotional-line">بعيدة... مميزة...</span>
+                <span class="emotional-line">وصعب أي حد يوصل لنورها الحقيقي.</span>
+                <span class="emotional-line">وفي وسط الزحمة دي كلها...</span>
+                <span class="emotional-line">أنتِ الحاجة الوحيدة اللي تستحق يتبصلها كل يوم وكأنها أول مرة.</span>
+                <span class="emotional-line">وإنت دايما أجمل  نجمة ⭐️</span>
+            </div>
+
+            <div class="final-message" id="finalMessage"> ✨يارب تجيبي العربية و النسناس يا يمنتي✨</div>
+        </div>
+    </section>
+
+    <script>
+       
+       // --- 3. Music Controller ---
+function switchMusic(activeAudioId) {
+    // إيقاف جميع المقاطع الصوتية
+    document.getElementById("music-page1").pause();
+    document.getElementById("music-page2").pause();
+    document.getElementById("music-page3").pause();
+
+    // تشغيل المقطع الجديد
+    let activeAudio = document.getElementById(activeAudioId);
+    activeAudio.currentTime = 0; // إرجاع المقطع للبداية
+    activeAudio.play().catch(error => console.log("المتصفح يمنع التشغيل التلقائي قبل تفاعل المستخدم"));
+}
+
+// تشغيل موسيقى الصفحة الأولى عند أول نقرة في أي مكان على الشاشة 
+// (المتصفحات الحديثة تمنع تشغيل الصوت تلقائياً بدون تفاعل المستخدم)
+document.body.addEventListener('click', function() {
+    let audio1 = document.getElementById("music-page1");
+    let page1 = document.getElementById("page1");
+    // تشتغل فقط لو الصفحة الأولى هي اللي ظاهرة والصوت كان واقف
+    if (audio1.paused && page1.classList.contains("active")) {
+        audio1.play();
+    }
+}, { once: true });
+       
+       
+       
+       
+       // --- 1. Initialize Particles (Stars) ---
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 150, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#ffffff", "#00f3ff", "#b500ff"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.8, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false } },
+                "size": { "value": 3, "random": true, "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false } },
+                "line_linked": { "enable": false },
+                "move": { "enable": true, "speed": 0.5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "bubble" }, "onclick": { "enable": true, "mode": "repulse" }, "resize": true },
+                "modes": { "bubble": { "distance": 200, "size": 6, "duration": 2, "opacity": 1, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 } }
+            },
+            "retina_detect": true
+        });
+
+        // --- 2. Page Transitions using GSAP ---
+        
+        function goToPage2() {
+            let tl = gsap.timeline();
+            
+            // Zoom in effect
+            tl.to("#page1", { scale: 1.5, opacity: 0, duration: 1, ease: "power2.inOut" })
+              .set("#page1", { className: "page hidden" })
+              .set("#page2", { className: "page active" })
+              .fromTo("#page2", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.5, ease: "power3.out" });
+              // تشغيل موسيقى الصفحة الثانية
+             switchMusic("music-page2");
+        }
+
+        function triggerWarp() {
+            let tl = gsap.timeline();
+            
+            // Spaceship engine glow up
+            gsap.to("#engine1, #engine2", { fill: "#fff", filter: "drop-shadow(0 0 20px #fff)", duration: 0.5, yoyo: true, repeat: 3 });
+            
+            // Warp speed effects
+            tl.to("#page2 .intro-text, #warpBtn", { opacity: 0, y: -20, duration: 0.5 })
+              .to(".spaceship-container", { y: "+=10", yoyo: true, repeat: 10, duration: 0.1 }) // Camera shake
+              .to(".spaceship-container", { scale: 0.2, y: -500, opacity: 0, duration: 1, ease: "power4.in" }) // Ship flies away
+              .to("#warpOverlay", { opacity: 1, duration: 0.5 }, "-=0.5") // Light flash
+              
+              // Transition to Page 3
+              .set("#page2", { className: "page hidden" })
+              .set("#page3", { className: "page active" })
+              .to("#warpOverlay", { opacity: 0, duration: 1 })
+              .call(startPage3Sequence);
+        }
+
+        function startPage3Sequence() {
+            
+            // تشغيل موسيقى الصفحة الثالثة الحزينة/العاطفية
+        switchMusic("music-page3");
+            
+            let tl = gsap.timeline();
+
+            // Fade in photos floating in space
+            tl.to(".photo-card", { opacity: 1, duration: 2, stagger: 0.3, ease: "power2.out" });
+
+            // Animate text descending / fading in
+            let lines = document.querySelectorAll(".emotional-line");
+            
+            tl.fromTo(lines, 
+                { opacity: 0, y: -30 }, 
+                { opacity: 1, y: 0, duration: 2, stagger: 1.5, ease: "power1.out" }
+            );
+
+            // Wait a few seconds to let them read, then fade text out and photos dim
+            tl.to(lines, { opacity: 0, y: 20, duration: 1.5, stagger: 0.1, delay: 4 })
+              .to(".photo-card", { opacity: 0.2, filter: "blur(5px)", duration: 2 }, "-=1.5")
+              
+              // Zoom out galaxy and show Happy Birthday
+              .to("#particles-js", { scale: 0.8, duration: 3, ease: "power2.inOut" }, "-=1")
+              .to("#finalMessage", { opacity: 1, scale: 1.2, duration: 2, ease: "back.out(1.7)" })
+              .to("#finalMessage", { scale: 1, duration: 1, textShadow: "0 0 40px #00f3ff, 0 0 80px #b500ff", repeat: -1, yoyo: true });
+        }
+    </script>
+</body>
+</html>
