@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Yumi✨</title>
+    <title>Yumi ✨</title>
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- GSAP & Particles.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
@@ -218,38 +216,73 @@
 
         .final-message {
             position: absolute;
-            font-size: 4rem;
+            /* استخدام clamp بيخلي الخط يكبر ويصغر تلقائياً حسب حجم الشاشة */
+            font-size: clamp(1.5rem, 5vw, 4rem); 
             font-weight: 900;
             color: white;
             text-shadow: 0 0 20px var(--neon-cyan), 0 0 50px var(--neon-purple);
             opacity: 0;
             z-index: 50;
+            text-align: center;
+            width: 95%; /* بيمنع الجملة الطويلة إنها تتقص من الجناب */
+            line-height: 1.5;
+            padding: 0 10px;
         }
 
-        /* Responsive */
+        /* -------------------------------------- */
+        /* Responsive Design - تصميم متجاوب لكل الشاشات */
+        /* -------------------------------------- */
+
+        /* شاشات التابلت واللابتوب الصغير */
+        @media (max-width: 1024px) {
+            .photo-card { width: 140px; height: 200px; }
+            .card-1 { top: 10%; right: 5%; }
+            .card-2 { bottom: 10%; left: 5%; }
+            .card-3 { top: 15%; left: 5%; }
+            .card-4 { bottom: 15%; right: 5%; }
+            .emotional-text { font-size: 1.5rem; width: 90%; }
+        }
+
+        /* شاشات الموبايل العادية */
         @media (max-width: 768px) {
-            .intro-text { font-size: 1.5rem; }
-            .spaceship-container { width: 200px; height: 200px; }
-            .photo-card { width: 120px; height: 160px; }
-            .emotional-text { font-size: 1.2rem; }
-            .final-message { font-size: 2.5rem; }
+            .intro-text { font-size: 1.5rem; width: 90%; text-align: center; line-height: 1.5; }
+            .orb-container { width: 200px; height: 200px; }
+            .spaceship-container { width: 220px; height: 220px; }
+            .glass-btn { font-size: 1.2rem; padding: 12px 25px; }
+            
+            .photo-card { width: 90px; height: 130px; border-width: 1px; padding: 5px; }
+            .card-1 { top: 8%; right: 2%; }
+            .card-2 { bottom: 8%; left: 2%; }
+            .card-3 { top: 8%; left: 2%; }
+            .card-4 { bottom: 8%; right: 2%; }
+            
+            .emotional-text { font-size: 1.2rem; max-width: 95%; }
+        }
+
+        /* شاشات الموبايل الصغيرة جداً */
+        @media (max-width: 480px) {
+            .intro-text { font-size: 1.2rem; }
+            .orb-container { width: 180px; height: 180px; }
+            .glass-btn { font-size: 1rem; padding: 10px 20px; }
+            .spaceship-container { width: 180px; height: 180px; }
+            
+            .photo-card { width: 75px; height: 105px; }
+            .card-2 { bottom: 12%; }
+            .card-4 { bottom: 12%; }
+            
+            .emotional-text { font-size: 1.1rem; line-height: 1.8; }
         }
     </style>
 </head>
 <body>
 
-<!-- ملفات الموسيقى لكل صفحة -->
-<audio id="music-page1" src="sound/Sc1.mp3" loop></audio>
-<audio id="music-page2" src="sound/Sc1.mp3" loop></audio>
-<audio id="music-page3" src="sound/Sc3.mp3" loop></audio>
+    <audio id="music-page1" src="sound/Sc1.mp3" preload="auto" loop></audio>
+    <audio id="music-page2" src="sound/Sc1.mp3" preload="auto" loop></audio>
+    <audio id="music-page3" src="sound/Sc3.mp3" preload="auto" loop></audio>
 
-
-
-    <!-- Space Background -->
     <div id="particles-js"></div>
     <div class="warp-overlay" id="warpOverlay"></div>
 
-    <!-- PAGE 1: INTRO -->
     <section id="page1" class="page active">
         <h1 class="intro-text">في رحلة وسط ملايين النجوم...</h1>
         <div class="orb-container">
@@ -259,11 +292,9 @@
         </div>
     </section>
 
-    <!-- PAGE 2: SPACESHIP -->
     <section id="page2" class="page">
         <h2 class="intro-text" style="text-align: center;">من اللحظة دي...<br>انسي كل اللي وراكي ✨</h2>
         
-        <!-- Premium SVG Spaceship -->
         <svg class="spaceship-container" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="shipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -287,17 +318,14 @@
         <button class="glass-btn" id="warpBtn" onclick="triggerWarp()">ابدأ الرحلة</button>
     </section>
 
-    <!-- PAGE 3: MEMORY & STARS -->
     <section id="page3" class="page">
         <div class="memory-container">
-            <!-- Replace 'src' with your actual image URLs -->
             <div class="photo-card card-1"><img src="img/yum1.jpg" alt="Memory 1"></div>
             <div class="photo-card card-2"><img src="img/yum2.jpg" alt="Memory 2"></div>
             <div class="photo-card card-3"><img src="img/yum3.jpg" alt="Memory 3"></div>
             <div class="photo-card card-4"><img src="img/yum4.jpg" alt="Memory 4"></div>
 
             <div class="emotional-text" id="emotionalText">
-                
                 <span class="emotional-line">في وسط ملايين النجوم...</span>
                 <span class="emotional-line">في نجمة مختلفة تمامًا ✨</span>
                 <span class="emotional-line">نجمة مش بس بتنور السما...</span>
@@ -306,7 +334,7 @@
                 <span class="emotional-line">وصعب أي حد يوصل لنورها الحقيقي.</span>
                 <span class="emotional-line">وفي وسط الزحمة دي كلها...</span>
                 <span class="emotional-line">أنتِ الحاجة الوحيدة اللي تستحق يتبصلها كل يوم وكأنها أول مرة.</span>
-                <span class="emotional-line">وإنت دايما أجمل  نجمة ⭐️</span>
+                <span class="emotional-line">وإنت دايما أجمل نجمة ⭐️</span>
             </div>
 
             <div class="final-message" id="finalMessage"> ✨يارب تجيبي العربية و النسناس يا يمنتي✨</div>
@@ -314,35 +342,7 @@
     </section>
 
     <script>
-       
-       // --- 3. Music Controller ---
-function switchMusic(activeAudioId) {
-    // إيقاف جميع المقاطع الصوتية
-    document.getElementById("music-page1").pause();
-    document.getElementById("music-page2").pause();
-    document.getElementById("music-page3").pause();
-
-    // تشغيل المقطع الجديد
-    let activeAudio = document.getElementById(activeAudioId);
-    activeAudio.currentTime = 0; // إرجاع المقطع للبداية
-    activeAudio.play().catch(error => console.log("المتصفح يمنع التشغيل التلقائي قبل تفاعل المستخدم"));
-}
-
-// تشغيل موسيقى الصفحة الأولى عند أول نقرة في أي مكان على الشاشة 
-// (المتصفحات الحديثة تمنع تشغيل الصوت تلقائياً بدون تفاعل المستخدم)
-document.body.addEventListener('click', function() {
-    let audio1 = document.getElementById("music-page1");
-    let page1 = document.getElementById("page1");
-    // تشتغل فقط لو الصفحة الأولى هي اللي ظاهرة والصوت كان واقف
-    if (audio1.paused && page1.classList.contains("active")) {
-        audio1.play();
-    }
-}, { once: true });
-       
-       
-       
-       
-       // --- 1. Initialize Particles (Stars) ---
+        // --- 1. Initialize Particles (Stars) ---
         particlesJS("particles-js", {
             "particles": {
                 "number": { "value": 150, "density": { "enable": true, "value_area": 800 } },
@@ -361,33 +361,58 @@ document.body.addEventListener('click', function() {
             "retina_detect": true
         });
 
-        // --- 2. Page Transitions using GSAP ---
-        
+        // --- 2. Music Controller (Updated for Autoplay policies) ---
+        function switchMusic(activeAudioId) {
+            let allAudios = ["music-page1", "music-page2", "music-page3"];
+            allAudios.forEach(id => {
+                let audio = document.getElementById(id);
+                if(audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            });
+
+            let activeAudio = document.getElementById(activeAudioId);
+            if (activeAudio) {
+                let playPromise = activeAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("المتصفح يمنع التشغيل التلقائي قبل تفاعل المستخدم", error);
+                    });
+                }
+            }
+        }
+
+        // إجبار تشغيل موسيقى الصفحة الأولى بمجرد النقر في أي مكان على الشاشة
+        window.addEventListener('click', function() {
+            let audio1 = document.getElementById("music-page1");
+            let page1 = document.getElementById("page1");
+            if (audio1 && audio1.paused && page1.classList.contains("active")) {
+                audio1.play();
+            }
+        }, { once: true });
+
+        // --- 3. Page Transitions using GSAP ---
         function goToPage2() {
             let tl = gsap.timeline();
             
-            // Zoom in effect
             tl.to("#page1", { scale: 1.5, opacity: 0, duration: 1, ease: "power2.inOut" })
               .set("#page1", { className: "page hidden" })
               .set("#page2", { className: "page active" })
               .fromTo("#page2", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.5, ease: "power3.out" });
-              // تشغيل موسيقى الصفحة الثانية
-             switchMusic("music-page2");
+              
+            switchMusic("music-page2");
         }
 
         function triggerWarp() {
             let tl = gsap.timeline();
             
-            // Spaceship engine glow up
             gsap.to("#engine1, #engine2", { fill: "#fff", filter: "drop-shadow(0 0 20px #fff)", duration: 0.5, yoyo: true, repeat: 3 });
             
-            // Warp speed effects
             tl.to("#page2 .intro-text, #warpBtn", { opacity: 0, y: -20, duration: 0.5 })
-              .to(".spaceship-container", { y: "+=10", yoyo: true, repeat: 10, duration: 0.1 }) // Camera shake
-              .to(".spaceship-container", { scale: 0.2, y: -500, opacity: 0, duration: 1, ease: "power4.in" }) // Ship flies away
-              .to("#warpOverlay", { opacity: 1, duration: 0.5 }, "-=0.5") // Light flash
-              
-              // Transition to Page 3
+              .to(".spaceship-container", { y: "+=10", yoyo: true, repeat: 10, duration: 0.1 })
+              .to(".spaceship-container", { scale: 0.2, y: -500, opacity: 0, duration: 1, ease: "power4.in" })
+              .to("#warpOverlay", { opacity: 1, duration: 0.5 }, "-=0.5")
               .set("#page2", { className: "page hidden" })
               .set("#page3", { className: "page active" })
               .to("#warpOverlay", { opacity: 0, duration: 1 })
@@ -395,16 +420,12 @@ document.body.addEventListener('click', function() {
         }
 
         function startPage3Sequence() {
-            
-            // تشغيل موسيقى الصفحة الثالثة الحزينة/العاطفية
-        switchMusic("music-page3");
+            switchMusic("music-page3");
             
             let tl = gsap.timeline();
 
-            // Fade in photos floating in space
             tl.to(".photo-card", { opacity: 1, duration: 2, stagger: 0.3, ease: "power2.out" });
 
-            // Animate text descending / fading in
             let lines = document.querySelectorAll(".emotional-line");
             
             tl.fromTo(lines, 
@@ -412,11 +433,8 @@ document.body.addEventListener('click', function() {
                 { opacity: 1, y: 0, duration: 2, stagger: 1.5, ease: "power1.out" }
             );
 
-            // Wait a few seconds to let them read, then fade text out and photos dim
             tl.to(lines, { opacity: 0, y: 20, duration: 1.5, stagger: 0.1, delay: 4 })
               .to(".photo-card", { opacity: 0.2, filter: "blur(5px)", duration: 2 }, "-=1.5")
-              
-              // Zoom out galaxy and show Happy Birthday
               .to("#particles-js", { scale: 0.8, duration: 3, ease: "power2.inOut" }, "-=1")
               .to("#finalMessage", { opacity: 1, scale: 1.2, duration: 2, ease: "back.out(1.7)" })
               .to("#finalMessage", { scale: 1, duration: 1, textShadow: "0 0 40px #00f3ff, 0 0 80px #b500ff", repeat: -1, yoyo: true });
